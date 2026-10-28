@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><title>天文知识挑战 · 第二组</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#e9eefb;background:#070b18;background-image:radial-gradient(120% 60% at 50% 0,#1d2f6b 0,#0a1128 55%,#05070f 100%);background-attachment:fixed;padding-bottom:104px}
+.wrap{max-width:580px;margin:0 auto;padding:0 14px 14px}
+.hero{text-align:center;padding:20px 6px 12px}
+.hero h1{font-size:21px;margin:0 0 6px;background:linear-gradient(90deg,#7fd8ff,#c39bff 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:#8fa0c8;font-size:12.5px}
+.bar{position:sticky;top:0;z-index:9;background:rgba(7,11,24,.9);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);margin:0 -14px 14px;padding:9px 16px;display:flex;align-items:center;gap:10px;font-size:12px;color:#9fb0d6}
+.track{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38d0ff,#9a6bff);transition:width .25s}
+.q{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px;margin:0 0 12px}
+.q h3{margin:0 0 4px;font-size:15px;font-weight:600;line-height:1.6}
+.q h3 b{color:#7fd8ff;margin-right:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;padding:10px 11px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);margin-top:8px;cursor:pointer;transition:.15s;-webkit-user-select:none;user-select:none}
+.opt .k{flex:0 0 20px;height:20px;border-radius:50%;background:rgba(255,255,255,.13);font-size:12px;text-align:center;line-height:20px;font-weight:700}
+.opt.sel{border-color:#4c8dff;background:rgba(76,141,255,.18)}
+.opt.sel .k{background:#4c8dff;color:#fff}
+.opt.right{border-color:#2fbf7a;background:rgba(47,191,122,.16)}
+.opt.right .k{background:#2fbf7a;color:#fff}
+.opt.wrong{border-color:#f2586d;background:rgba(242,88,109,.14)}
+.opt.wrong .k{background:#f2586d;color:#fff}
+.opt .mk{margin-left:auto;font-size:12px;color:#9fb0d6;white-space:nowrap}
+#sub{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,#05070f 55%,rgba(5,7,15,0));z-index:10}
+#btn{display:block;width:100%;max-width:552px;margin:0 auto;padding:14px;border:0;border-radius:12px;font-size:16px;font-weight:700;background:#222b47;color:#78849f;font-family:inherit}
+#btn.on{background:linear-gradient(90deg,#2b8cff,#7a4dff);color:#fff;box-shadow:0 8px 22px rgba(60,110,255,.35)}
+.score{font-size:46px;font-weight:800;line-height:1.1;margin:6px 0 2px;background:linear-gradient(90deg,#38d0ff,#9a6bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.score span{font-size:18px;color:#7d8bb3;-webkit-text-fill-color:#7d8bb3;font-weight:600}
+.exp{margin-top:10px;padding:10px 11px;border-radius:10px;background:rgba(120,160,255,.1);border-left:3px solid #5b8cff;font-size:13px;color:#cfd9f2;line-height:1.65}
+.exp b.ok{color:#3fd68c}.exp b.no{color:#ff7b8c}
+.note{text-align:center;color:#7d8bb3;font-size:12px;margin:18px 0 8px}
+</style></head><body>
+<div class="wrap">
+  <div class="hero"><h1>天文知识挑战 · 第二组</h1><p>共 10 题 · 每题 1 分 · 满分 10 分 · 每台设备限答一次</p></div>
+  <div class="bar"><span id="cnt">已答 0/10</span><div class="track"><i id="prog"></i></div></div>
+  <div id="list"></div>
+</div>
+<div id="sub"><button id="btn" disabled>请先答完全部 10 题</button></div>
+<div class="wrap" id="res" style="display:none"></div>
+<script>
+var QS=[
+{q:"受光速的影响，我们看到的太阳，实际上是多长时间之前的样子？",o:["很短（远远小于 1 秒钟）","3 分钟","8 分钟","15 分钟"],a:2,e:"日地平均距离约 1.5 亿公里，光速约 30 万公里/秒，阳光走完这段路约需 8 分 20 秒。"},
+{q:"小行星带位于哪两颗行星之间？",o:["金星、地球","地球、火星","火星、木星","木星、土星"],a:2,e:"小行星带位于火星与木星轨道之间，是太阳系形成时被木星引力“拦住”、未能聚合成行星的残留物质。"},
+{q:"地球半径大约是月球的 4 倍，质量大约是月球的 81 倍，则地球和月球的密度？",o:["地球大","月球大","基本一样大","难以确定"],a:2,e:"密度 ρ ∝ M / R³，81 / 4³ ≈ 1.27，两者密度处于同一量级、相差不大，故选“基本一样大”。"},
+{q:"下列关于黑洞的说法，正确的是",o:["黑洞的环绕速度（第一宇宙速度）等于光速","当一个天体的半径缩小到 2GM/c² 时，成为一个黑洞","太阳在消亡之后，会变成黑洞","银河系中心的超大质量黑洞是由恒星演化而来的"],a:1,e:"2GM/c² 就是史瓦西半径。黑洞表面是“逃逸速度”等于光速，而非环绕速度（A 错）；太阳质量太小，最终会成为白矮星（C 错）；银心超大质量黑洞主要由气体吸积与并合长大（D 错）。"},
+{q:"下列关于视星等和绝对星等的说法，不正确的是",o:["织女星的视星等大约是 0 等","太阳的绝对星等是 −26.8 等","视星等小的恒星，发光能力不一定强","某恒星距离地球 1000pc，视星等约为 2 等，则绝对星等约为 −8 等"],a:1,e:"−26.8 等是太阳的“视星等”，它的绝对星等约 +4.8 等，故 B 不正确。距离 1000pc 时 M = m − 5lg(d/10) = 2 − 10 = −8 等，D 正确。"},
+{q:"太阳系八大行星中不能用肉眼观测的行星是____，原因是____。",o:["水星、金星；离太阳太近，淹没于太阳光辉","天王星、海王星；离太阳太近，淹没于太阳光辉","水星、金星；离太阳太远，视星等太大","天王星、海王星；离太阳太远，视星等太大"],a:3,e:"水星、金星都能用肉眼看到，金星还是全天最亮的行星；天王星约 6 等、海王星约 8 等，太暗，肉眼看不到，故选 D。"},
+{q:"下列关于“金星凌日”的说法，不正确的是",o:["地球上除可观测到“金星凌日”外，还可观测到“水星凌日”","火星上也可以看到“金星凌日”","“金星凌日”的原理可以用于寻找系外行星","“金星凌日”会让太阳大大变暗，只需用肉眼便能轻易看到"],a:3,e:"金星视直径极小，凌日时太阳亮度几乎没有变化，而且必须用带减光滤镜的望远镜观测——绝不能用肉眼直视太阳，故 D 错误。"},
+{q:"下列关于望远镜的说法，正确的是",o:["伽利略望远镜是“双凸”，开普勒望远镜是“凹凸”","伽利略望远镜是“双凸”，开普勒望远镜是“双凸”","伽利略望远镜是“凹凸”，开普勒望远镜是“凹凸”","伽利略望远镜是“凹凸”，开普勒望远镜是“双凸”"],a:3,e:"伽利略式用凸透镜作物镜、凹透镜作目镜（凹凸），成正立像；开普勒式物镜和目镜都是凸透镜（双凸），成倒立像，视场更大。"},
+{q:"下列关于“天问一号”的说法，不正确的是",o:["“天问一号”能够完成“绕、落、巡”三大任务","2021 年 5 月 15 日，“天问一号”着陆成功","它是中国首次发射的火星探测器","“天问一号”传回的火星照片只有黑白的"],a:3,e:"“天问一号”与“祝融号”火星车传回了大量彩色影像，D 错误；A、B、C 均正确。"},
+{q:"2020 年，科学家发现了中等质量黑洞的存在。已知黑洞主要有两类：恒星级黑洞和超大质量黑洞，中等质量黑洞的质量介于二者之间。下列说法正确的是",o:["此黑洞不可能是由几个恒星级黑洞合并而来","此黑洞对现有的黑洞理论提出了挑战","此黑洞的形成过程，不可能和超大质量黑洞的形成过程有相似性","黑洞的合并过程中，质量守恒"],a:1,e:"中等质量黑洞长期“缺席”，它的发现既填补了质量空隙，也对黑洞形成理论提出新问题（B 对）。恒星级黑洞并合可以形成中等质量黑洞（A 错），其形成机制可能与超大质量黑洞有相通之处（C 错），并合会以引力波形式辐射能量、质量并不严格守恒（D 错）。"}];
+var KEY="astro-quiz-2026-v2",ans=[],locked=false;
+for(var i=0;i<QS.length;i++)ans.push(-1);
+var list=document.getElementById("list"),res=document.getElementById("res"),btn=document.getElementById("btn"),cnt=document.getElementById("cnt"),prog=document.getElementById("prog");
+function paint(){
+  var done=0,h="";
+  for(var i=0;i<QS.length;i++){
+    var it=QS[i];if(ans[i]>=0)done++;
+    h+='<div class="q"><h3><b>'+(i+1)+'.</b>'+it.q+'</h3>';
+    for(var j=0;j<it.o.length;j++){
+      h+='<div class="opt'+(ans[i]===j?' sel':'')+'" data-q="'+i+'" data-o="'+j+'"><span class="k">'+"ABCD".charAt(j)+'</span><span>'+it.o[j]+'</span></div>';
+    }
+    h+='</div>';
+  }
+  list.innerHTML=h;
+  cnt.textContent="已答 "+done+"/10";
+  prog.style.width=(done*10)+"%";
+  if(done===10&&!locked){btn.disabled=false;btn.className="on";btn.textContent="提交答卷";}
+  else if(!locked){btn.disabled=true;btn.className="";btn.textContent="请先答完全部 10 题（还差 "+(10-done)+" 题）";}
+}
+list.addEventListener("click",function(e){
+  if(locked)return;
+  var t=e.target;while(t&&t!==list&&!t.getAttribute("data-q"))t=t.parentNode;
+  if(!t||t===list)return;
+  ans[+t.getAttribute("data-q")]=+t.getAttribute("data-o");
+  paint();
+});
+function showResult(a){
+  locked=true;
+  document.getElementById("sub").style.display="none";
+  var box=document.querySelector(".wrap");box.style.display="none";
+  var score=0,h='<div class="hero"><h1>答题结果</h1><div class="score">';
+  for(var k=0;k<QS.length;k++)if(a[k]===QS[k].a)score++;
+  h+=score+'<span> / 10 分</span></div><p>每题 1 分 · 正确答案与解析如下</p></div>';
+  for(var i=0;i<QS.length;i++){
+    var it=QS[i],ok=(a[i]===it.a);
+    h+='<div class="q"><h3><b>'+(i+1)+'.</b>'+it.q+'</h3>';
+    for(var j=0;j<it.o.length;j++){
+      var cls="opt",mk="";
+      if(j===it.a){cls+=" right";mk=a[i]===it.a?"✓ 你的选择 · 正确答案":"正确答案";}
+      else if(j===a[i]){cls+=" wrong";mk="✗ 你的选择";}
+      h+='<div class="'+cls+'"><span class="k">'+"ABCD".charAt(j)+'</span><span>'+it.o[j]+'</span><span class="mk">'+mk+'</span></div>';
+    }
+    h+='<div class="exp"><b class="'+(ok?"ok":"no")+'">'+(ok?"✔ 回答正确":"✘ 回答错误")+'</b> 　正确答案：'+"ABCD".charAt(it.a)+'。'+it.e+'</div></div>';
+  }
+  h+='<div class="note">本次答题已提交，每台设备仅可作答一次</div>';
+  res.innerHTML=h;res.style.display="block";window.scrollTo(0,0);
+}
+function submit(){
+  if(locked)return;
+  for(var i=0;i<QS.length;i++)if(ans[i]<0)return;
+  locked=true;
+  try{localStorage.setItem(KEY,JSON.stringify({a:ans,t:Date.now()}))}catch(err){}
+  showResult(ans);
+}
+btn.addEventListener("click",submit);
+var saved=null;
+try{saved=JSON.parse(localStorage.getItem(KEY)||"null")}catch(err){}
+if(saved&&saved.a&&saved.a.length===QS.length){showResult(saved.a);}else{paint();}
+</script></body></html>
