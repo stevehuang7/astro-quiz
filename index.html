@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><title>天文知识挑战 · 十题</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#e9eefb;background:#070b18;background-image:radial-gradient(120% 60% at 50% 0,#1d2f6b 0,#0a1128 55%,#05070f 100%);background-attachment:fixed;padding-bottom:104px}
+.wrap{max-width:580px;margin:0 auto;padding:0 14px 14px}
+.hero{text-align:center;padding:20px 6px 12px}
+.hero h1{font-size:21px;margin:0 0 6px;background:linear-gradient(90deg,#7fd8ff,#c39bff 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:#8fa0c8;font-size:12.5px}
+.bar{position:sticky;top:0;z-index:9;background:rgba(7,11,24,.9);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);margin:0 -14px 14px;padding:9px 16px;display:flex;align-items:center;gap:10px;font-size:12px;color:#9fb0d6}
+.track{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38d0ff,#9a6bff);transition:width .25s}
+.q{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px;margin:0 0 12px}
+.q h3{margin:0 0 4px;font-size:15px;font-weight:600;line-height:1.6}
+.q h3 b{color:#7fd8ff;margin-right:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;padding:10px 11px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);margin-top:8px;cursor:pointer;transition:.15s;-webkit-user-select:none;user-select:none}
+.opt .k{flex:0 0 20px;height:20px;border-radius:50%;background:rgba(255,255,255,.13);font-size:12px;text-align:center;line-height:20px;font-weight:700}
+.opt.sel{border-color:#4c8dff;background:rgba(76,141,255,.18)}
+.opt.sel .k{background:#4c8dff;color:#fff}
+.opt.right{border-color:#2fbf7a;background:rgba(47,191,122,.16)}
+.opt.right .k{background:#2fbf7a;color:#fff}
+.opt.wrong{border-color:#f2586d;background:rgba(242,88,109,.14)}
+.opt.wrong .k{background:#f2586d;color:#fff}
+.opt .mk{margin-left:auto;font-size:12px;color:#9fb0d6;white-space:nowrap}
+#sub{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,#05070f 55%,rgba(5,7,15,0));z-index:10}
+#btn{display:block;width:100%;max-width:552px;margin:0 auto;padding:14px;border:0;border-radius:12px;font-size:16px;font-weight:700;background:#222b47;color:#78849f;font-family:inherit}
+#btn.on{background:linear-gradient(90deg,#2b8cff,#7a4dff);color:#fff;box-shadow:0 8px 22px rgba(60,110,255,.35)}
+.score{font-size:46px;font-weight:800;line-height:1.1;margin:6px 0 2px;background:linear-gradient(90deg,#38d0ff,#9a6bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.score span{font-size:18px;color:#7d8bb3;-webkit-text-fill-color:#7d8bb3;font-weight:600}
+.exp{margin-top:10px;padding:10px 11px;border-radius:10px;background:rgba(120,160,255,.1);border-left:3px solid #5b8cff;font-size:13px;color:#cfd9f2;line-height:1.65}
+.exp b.ok{color:#3fd68c}.exp b.no{color:#ff7b8c}
+.note{text-align:center;color:#7d8bb3;font-size:12px;margin:18px 0 8px}
+</style></head><body>
+<div class="wrap">
+  <div class="hero"><h1>天文知识挑战</h1><p>共 10 题 · 每题 1 分 · 满分 10 分 · 每台设备限答一次</p></div>
+  <div class="bar"><span id="cnt">已答 0/10</span><div class="track"><i id="prog"></i></div></div>
+  <div id="list"></div>
+</div>
+<div id="sub"><button id="btn" disabled>请先答完全部 10 题</button></div>
+<div class="wrap" id="res" style="display:none"></div>
+<script>
+var QS=[
+{q:"下列哪个是太阳系八大行星的正确顺序？",o:["水星—金星—地球—火星—土星—木星—天王星—海王星","水星—金星—火星—地球—木星—土星—天王星—海王星","水星—金星—地球—火星—木星—土星—天王星—海王星","水星—金星—地球—火星—木星—土星—海王星—天王星"],a:2,e:"由太阳向外依次为：水星、金星、地球、火星、木星、土星、天王星、海王星。"},
+{q:"地球的轨道速率约为 30km/s。假设某种装置能大幅提高地球的轨道速率，则下列速率中，不能使地球脱离太阳系的有几个？（60、50、45、40、35 km/s）",o:["1个","2个","3个","4个"],a:1,e:"绕日圆轨道速率 v 时，逃逸速度为 √2·v ≈ 42.4km/s。60、50、45km/s 均可脱离，40、35km/s 不能，故为 2 个。"},
+{q:"2003年发现的“塞德娜”是目前距太阳最远的天体之一，公转周期约 11400 年，近日点约 76AU，则其远日点约为多少？",o:["76AU","506AU","937AU","1012AU"],a:2,e:"开普勒第三定律 a ³ = P ²（AU、年），得 a ≈ 506AU；远日点 = 2a − 近日点 ≈ 1012 − 76 ≈ 937AU。"},
+{q:"曾被称为“第十大行星”的 Eris（轨道离心率约 0.44，公转周期约 557 年）与冥王星一起被归为矮行星。下列说法正确的是",o:["冥王星降级是因为其质量不足以达到流体静力平衡","Eris 近日点与远日点的轨道速率之比约为 2.6 : 1","冥王星—卡戎系统的质心位于冥王星内部","Eris 的轨道半长轴约为 134AU"],a:1,e:"速率比 =(1+e)/(1−e)= 1.44/0.56 ≈ 2.6 : 1。由 a ³=P ² 得 a ≈ 68AU（D错）；冥王星降级是因未能清除轨道附近天体（A错）；冥王星—卡戎质心在冥王星之外（C错）。"},
+{q:"观测太阳经常需要用到 H-α 滤镜，H-α 谱线的波长大约是",o:["656.3nm","486.1nm","434.1nm","410.2nm"],a:0,e:"H-α 是氢原子巴耳末系的第一条谱线，波长约 656.3nm，呈红色。486.1nm、434.1nm、410.2nm 分别是 H-β、H-γ、H-δ。"},
+{q:"下列关于哈勃定律的叙述，不正确的是",o:["哈勃定律指遥远星系的退行速度与它们和地球的距离成正比","哈勃常数的单位是 km/s/(Mpc)","哈勃定律与宇宙的膨胀有关","不同天文学家测得的哈勃常数基本一致"],a:3,e:"用不同方法（造父变星、微波背景、引力透镜等）测得的哈勃常数存在明显差异，即“哈勃常数之争”，故 D 错误。"},
+{q:"“夜空中最亮的星”天狼星有一颗白矮星伴星天狼星B。下列时机中，最适合观测天狼星B的是",o:["天狼星B位于双星轨道“远日点”时","天狼星B位于双星轨道“近日点”时","天狼星B位于地球与天狼星连线上时","天狼星位于地球与天狼星B连线上时"],a:0,e:"天狼星A比B亮约一万倍。B 在远日点时与主星角距最大、最不易被主星强光淹没，因此最容易观测。"},
+{q:"“火星冲日”指太阳、地球、火星三点一线且地火分居太阳两侧；“金星凌日”指太阳、金星、地球三点一线，金星从日面经过。（公转周期：金星225天、地球365天、火星687天）下列说法不正确的是",o:["“火星冲日”是观测火星的最佳时机","“火星冲日”的周期约为 779 天","金星与地球的会合周期约 584 天，因此金星凌日的周期也是 584 天","上一次“金星凌日”发生在 2012 年"],a:2,e:"凌日还要求金星恰好经过轨道交点附近，因此并非每个会合周期都会发生；金星凌日成对出现（相隔 8 年），两组之间相隔 105.5 或 121.5 年。"},
+{q:"下列关于白矮星、中子星、黑洞的说法，正确的是",o:["小质量恒星和中等质量恒星演化到末期会形成白矮星","中子星的密度与白矮星差不多","黑洞又被称为“脉冲星”","任何天体都不可能环绕黑洞运行"],a:0,e:"中小质量恒星抛掉外层后留下白矮星；中子星密度比白矮星高得多，“脉冲星”实为中子星；天体可以绕黑洞公转（如银心黑洞外的 S2 恒星）。"},
+{q:"地球的自转周期____24 小时，这是因为____。",o:["大于，地球的公转","等于，一天的长度就是 24 小时","小于，地球的公转","小于，测量有误差"],a:2,e:"地球自转的恒星周期约 23 小时 56 分 4 秒，小于 24 小时；因为地球同时在公转，还需再转约 4 分钟太阳才回到同一位置，这才是 24 小时的“太阳日”。"}];
+var KEY="astro-quiz-2026-v1",ans=[],locked=false;
+for(var i=0;i<QS.length;i++)ans.push(-1);
+var list=document.getElementById("list"),res=document.getElementById("res"),btn=document.getElementById("btn"),cnt=document.getElementById("cnt"),prog=document.getElementById("prog");
+function paint(){
+  var done=0,h="";
+  for(var i=0;i<QS.length;i++){
+    var it=QS[i];if(ans[i]>=0)done++;
+    h+='<div class="q"><h3><b>'+(i+1)+'.</b>'+it.q+'</h3>';
+    for(var j=0;j<it.o.length;j++){
+      h+='<div class="opt'+(ans[i]===j?' sel':'')+'" data-q="'+i+'" data-o="'+j+'"><span class="k">'+"ABCD".charAt(j)+'</span><span>'+it.o[j]+'</span></div>';
+    }
+    h+='</div>';
+  }
+  list.innerHTML=h;
+  cnt.textContent="已答 "+done+"/10";
+  prog.style.width=(done*10)+"%";
+  if(done===10&&!locked){btn.disabled=false;btn.className="on";btn.textContent="提交答卷";}
+  else if(!locked){btn.disabled=true;btn.className="";btn.textContent="请先答完全部 10 题（还差 "+(10-done)+" 题）";}
+}
+list.addEventListener("click",function(e){
+  if(locked)return;
+  var t=e.target;while(t&&t!==list&&!t.getAttribute("data-q"))t=t.parentNode;
+  if(!t||t===list)return;
+  ans[+t.getAttribute("data-q")]=+t.getAttribute("data-o");
+  paint();
+});
+function showResult(a){
+  locked=true;
+  document.getElementById("sub").style.display="none";
+  var box=document.querySelector(".wrap");box.style.display="none";
+  var score=0,h='<div class="hero"><h1>答题结果</h1><div class="score">';
+  for(var k=0;k<QS.length;k++)if(a[k]===QS[k].a)score++;
+  h+=score+'<span> / 10 分</span></div><p>每题 1 分 · 正确答案与解析如下</p></div>';
+  for(var i=0;i<QS.length;i++){
+    var it=QS[i],ok=(a[i]===it.a);
+    h+='<div class="q"><h3><b>'+(i+1)+'.</b>'+it.q+'</h3>';
+    for(var j=0;j<it.o.length;j++){
+      var cls="opt",mk="";
+      if(j===it.a){cls+=" right";mk=a[i]===it.a?"✓ 你的选择 · 正确答案":"正确答案";}
+      else if(j===a[i]){cls+=" wrong";mk="✗ 你的选择";}
+      h+='<div class="'+cls+'"><span class="k">'+"ABCD".charAt(j)+'</span><span>'+it.o[j]+'</span><span class="mk">'+mk+'</span></div>';
+    }
+    h+='<div class="exp"><b class="'+(ok?"ok":"no")+'">'+(ok?"✔ 回答正确":"✘ 回答错误")+'</b> 　正确答案：'+"ABCD".charAt(it.a)+'。'+it.e+'</div></div>';
+  }
+  h+='<div class="note">本次答题已提交，每台设备仅可作答一次</div>';
+  res.innerHTML=h;res.style.display="block";window.scrollTo(0,0);
+}
+function submit(){
+  if(locked)return;
+  for(var i=0;i<QS.length;i++)if(ans[i]<0)return;
+  locked=true;
+  try{localStorage.setItem(KEY,JSON.stringify({a:ans,t:Date.now()}))}catch(err){}
+  showResult(ans);
+}
+btn.addEventListener("click",submit);
+var saved=null;
+try{saved=JSON.parse(localStorage.getItem(KEY)||"null")}catch(err){}
+if(saved&&saved.a&&saved.a.length===QS.length){showResult(saved.a);}else{paint();}
+</script></body></html>
